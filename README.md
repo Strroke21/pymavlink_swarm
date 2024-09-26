@@ -7,7 +7,7 @@ https://gazebosim.org/docs/garden/install_ubuntu/
 # 2. Ros2 humble installation for gazebo garden/harmonic
 [Getting Started with ROS2: Install and Setup ROS2 Humble on Ubuntu 22.04(LTS)](https://medium.com/spinor/getting-started-with-ros2-install-and-setup-ros2-humble-on-ubuntu-22-04-lts-ad718d4a3ac2)
 
-# 3. Gazebo and ros2 humble plugin
+# 3. Gazebo garden/harmonic and ros2 humble plugin
 https://gazebosim.org/docs/latest/ros_installation/
 
 # 4. Ardupilot Plugin for gazebo garden/harmonic 
