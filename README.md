@@ -58,6 +58,7 @@ https://ardupilot.org/dev/docs/sitl-with-gazebo.html
 * after modification include those different multicopters in world's model.sdf file it can be found in the following directory:
 
 ``` cd /gz_ws/src/ardupilot_gazebo/worlds ```
+
 *Include all multicopters like this
 
 ```     <!-- LEADER -->
