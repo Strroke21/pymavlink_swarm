@@ -55,6 +55,35 @@ https://ardupilot.org/dev/docs/sitl-with-gazebo.html
         <have_32_channels>0</have_32_channels> ```
 
 [Note: The fdm port should be unique for every instance replace 9022 by adding 10 to it for new multicopter instance]
+* after modification include those different multicopters in world's model.sdf file it can be found in the following directory:
+
+``` cd /gz_ws/src/ardupilot_gazebo/worlds ```
+*Include all multicopters like this
+
+```     <!-- LEADER -->
+    <include>
+      <uri>model://leader</uri>
+      <pose degrees="true">0 0 0.195 0 0 90</pose>
+    </include>
+    
+     <!-- follower1 -->
+    <include>
+      <uri>model://follower1</uri>
+      <pose degrees="true">2 0 0.195 0 0 90</pose>
+    </include>
+    
+    <!-- follower2 -->
+    <include>
+      <uri>model://follower2</uri>
+      <pose degrees="true">0 2 0.195 0 0 90</pose>
+    </include>
+    
+    <!-- follower3 -->
+    <include>
+      <uri>model://follower3</uri>
+      <pose degrees="true">2 2 0.195 0 0 90</pose>
+    </include>
+```
 
 # 7. Launching Ardupilot SITL and Gazebo
 * each instance should be in different terminal
