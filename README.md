@@ -39,19 +39,19 @@ https://ardupilot.org/dev/docs/sitl-with-gazebo.html
 * edit model.sdf file for each multicopter model to communicate will ardupilot sitl instances:
   ``` <plugin name="ArduPilotPlugin" ```
   
-      ```filename="ArduPilotPlugin">```
+        filename="ArduPilotPlugin">```
   
-      ```<!-- Port settings -->```
+        <!-- Port settings -->```
   
-      ```<fdm_addr>127.0.0.1</fdm_addr>```
+        <fdm_addr>127.0.0.1</fdm_addr>```
   
-      ```<fdm_port_in>9022</fdm_port_in>```
+        <fdm_port_in>9022</fdm_port_in>```
   
-      ```<connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>```
+        <connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>```
   
-      ```<lock_step>1</lock_step>```
+        <lock_step>1</lock_step>```
   
-      ```<have_32_channels>0</have_32_channels> ```
+        <have_32_channels>0</have_32_channels> ```
 
 [Note: The fdm port should be unique for every instance replace 9022 by adding 10 to it for new multicopter instance]
 
