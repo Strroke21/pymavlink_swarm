@@ -69,6 +69,20 @@ https://ardupilot.org/dev/docs/sitl-with-gazebo.html
   
 ``` gz sim -v4 -r swarm.sdf ```
 
+# 8. Broadcast Leader Position
+
+``` cd pymavlink_swarm ```
+
+``` python3 sim_leader.py ```
+
+# 9. Run follower script 
+
+``` python3 sim_follower1.py ```
+
+``` python3 sim_follower2.py ```
+
+``` python3 sim_follower3.py ```
+
 
   
 
