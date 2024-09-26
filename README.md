@@ -21,3 +21,26 @@ https://ardupilot.org/dev/docs/sitl-with-gazebo.html
 ``` sim_vehicle.py -v ArduCopter -f gazebo-iris --console --map --out=udp:127.0.0.1:14551 -I2 ```
 
 [note: replace -I1 with I2, I3… for multiple instances ]
+
+# 6. Spawn multiple drones in gazebo garden/harmonic
+* make multiple copies of multirotor model with unique names as per your requirement
+* models can be found in the follwoing folder
+  ```cd /gz_ws/src/ardupilot_gazebo/models```
+* edit communication fdm address of ardupilot plugin in multirotr model file
+``` cd /gz_ws/src/ardupilot_gazebo/models/follower1 ```
+[note: follower1 is my one of multicopters name ]
+
+* edit model.sdf file for each multicopter model to communicate will ardupilot sitl instances:
+  ``` <plugin name="ArduPilotPlugin" ```
+      ```filename="ArduPilotPlugin">```
+      ```<!-- Port settings -->```
+      ```<fdm_addr>127.0.0.1</fdm_addr>```
+      ```<fdm_port_in>9022</fdm_port_in>```
+      ```<connectionTimeoutMaxCount>5</connectionTimeoutMaxCount>```
+      ```<lock_step>1</lock_step>```
+      ```<have_32_channels>0</have_32_channels> ```
+
+[Note: The fdm port should be unique for every instance replace 9022 by adding 10 to it for new multicopter instance]
+
+  
+
