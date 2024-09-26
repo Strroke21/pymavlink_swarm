@@ -18,6 +18,7 @@ https://ardupilot.org/dev/docs/sitl-with-gazebo.html
 # 5. command to launch multiple ardupilot sitl:
 
 ``` sim_vehicle.py -v ArduCopter -f gazebo-iris --console --map --out=udp:127.0.0.1:14551 -I1 ```
+
 ``` sim_vehicle.py -v ArduCopter -f gazebo-iris --console --map --out=udp:127.0.0.1:14551 -I2 ```
 
 [note: replace -I1 with I2, I3… for multiple instances ]
