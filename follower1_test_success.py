@@ -9,6 +9,25 @@ import pyudev
 from receiver_rfd900x import mavlink_receiver_rfd900x, mavlink_data_queue
 
 
+#----------- Variables-----------
+relativePosition = 'right' #follower1 in the straight right of the leader
+distance = 10 #10 m in right
+angle = 90 #angular pos relative to leader
+form_alt = 10 #initial formation altitude
+
+#unchanged
+counter = 0
+tar_alt = 20
+land_alt = 5
+
+#-------------- rfd parameters ----------
+baud_rate = 57600
+mavlink_connection = mavutil.mavlink_connection('/dev/ttyUSB0', baud_rate)
+drone_data = mavlink_receiver_rfd900x(mavlink_connection)
+drone_data.start_receiving()
+
+#-------------- Functions -----------------------
+
 def connect(connection_string):
 
     vehicle =  mavutil.mavlink_connection(connection_string)
@@ -17,8 +36,7 @@ def connect(connection_string):
 
 def arm(vehicle):
     #arm the drone
-    vehicle.mav.command_long_send(vehicle.target_system, vehicle.target_component,
-    	                                 mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 1, 0, 0, 0, 0, 0, 0)
+    vehicle.mav.command_long_send(vehicle.target_system, vehicle.target_component,mavutil.mavlink.MAV_CMD_COMPONENT_ARM_DISARM, 0, 1, 0, 0, 0, 0, 0, 0)
     
 def VehicleMode(vehicle,mode):
 
@@ -27,27 +45,11 @@ def VehicleMode(vehicle,mode):
         mode_id = modes.index(mode)
     else:
         mode_id = 12
-    ##### changing to guided mode #####
-    #mode_id = 0:STABILIZE, 1:ACRO, 2: ALT_HOLD, 3:AUTO, 4:GUIDED, 5:LOITER, 6:RTL, 7:CIRCLE, 9:LAND 12:None
-    vehicle.mav.set_mode_send(
-        vehicle.target_system,mavutil.mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,mode_id)
+    vehicle.mav.set_mode_send(vehicle.target_system,mavutil.mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,mode_id)
     
 def drone_takeoff(vehicle, altitude):
-    
     # Send MAVLink command to takeoff
-    vehicle.mav.command_long_send(
-        vehicle.target_system,       # target_system
-        vehicle.target_component,    # target_component
-        mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,  # command
-        0,                          # confirmation
-        0,                          # param1 (min pitch, not used)
-        0,                          # param2 (empty for now, not used)
-        0,                          # param3 (empty for now, not used)
-        0,                          # param4 (yaw angle in degrees, not used)
-        0,                          # param5 (latitude, not used)
-        0,                          # param6 (longitude, not used)
-        altitude                    # param7 (altitude in meters)
-    )
+    vehicle.mav.command_long_send(vehicle.target_system,vehicle.target_component,mavutil.mavlink.MAV_CMD_NAV_TAKEOFF,0,0,0,0,0,0,0,altitude)
 
 def get_global_position(vehicle):
     vehicle.wait_heartbeat()
@@ -88,7 +90,6 @@ def get_heading(vehicle):
     mavutil.mavlink.MAV_CMD_REQUEST_MESSAGE,0,74,0,0,0,0,0,0)
     ack_msg = vehicle.recv_match(type='COMMAND_ACK', blocking=True, timeout=3)
     #### COMMAND_ACK has a message id of 512.
-
     msg = vehicle.recv_match(type='VFR_HUD',blocking=True)
 
     heading = msg.heading
@@ -266,11 +267,6 @@ def send_position_setpoint(vehicle, pos_x, pos_y, pos_z):
         0, 0                        # yaw, yaw_rate (not used)
     )
 
-baud_rate = 57600
-mavlink_connection = mavutil.mavlink_connection('/dev/ttyUSB0', baud_rate)
-drone_data = mavlink_receiver_rfd900x(mavlink_connection)
-drone_data.start_receiving()
-
 #-------------------------------------arming checkpoint for follower from leader------------------------------
 while True:
     data = mavlink_data_queue.get()
@@ -283,33 +279,25 @@ while True:
     else:
         print("no data received from leader")
 
-#----------- Variables-----------
-counter = 0
-relativePosition = 'right' #follower1 in the straight right of the leader
-distance = 10 #10 m in right
-angle = 90 #angular pos relative to leader
-form_alt = 10 #initial formation altitude
-tar_alt = 20
 
 #---------- follower connection ---------
 follower1 = connect('/dev/ttyACM0')#('tcp:127.0.0.1:5763')
 print("follower1 connected.")
+#----------guided mode ----------
+VehicleMode(follower1,"GUIDED")
+print("follower1 in GUIDED mode")
+time.sleep(1)
 
 #-------------- arming and takeoff checkpoint 
-
 while True:
-#----------guided mode ----------
-    VehicleMode(follower1,"GUIDED")
-    print("follower1 in GUIDED mode")
-    time.sleep(1)
     #------- arm --------
     arm(follower1)
     print("arming the follower1")
-    time.sleep(5)
+    time.sleep(0.15)
     #---------- guided takeoff -----------
     drone_takeoff(follower1,form_alt)
     print("taking off follower1")
-    time.sleep(3)
+    time.sleep(0.15)
     alt = abs(get_local_position(follower1)[2])
     print(f"Initial altitude Check: {alt} m.")
     if alt>=0.5:
@@ -325,7 +313,7 @@ while True:
         print("Target altitude reached.")
         break
 
-#######------------------- main ------------------ ######
+#------------------- main ------------------
 while True:
     #position fetch
     pos = mavlink_data_queue.get()
@@ -357,7 +345,7 @@ while True:
 
             formation(angle,distance,tar_alt)   #position correction with final altitude   
 
-        if abs(rel_alt) <= 5: #this altitude should be local not relative just for now we are using this
+        if abs(rel_alt) <= land_alt: #this altitude should be local not relative just for now using this
             VehicleMode(follower1,"LAND")
             time.sleep(1)
 
