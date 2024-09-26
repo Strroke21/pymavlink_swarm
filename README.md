@@ -42,5 +42,15 @@ https://ardupilot.org/dev/docs/sitl-with-gazebo.html
 
 [Note: The fdm port should be unique for every instance replace 9022 by adding 10 to it for new multicopter instance]
 
+# 7. Launching Ardupilot SITL and Gazebo
+* each instance should be in different terminal
+* Ardupilot sitl Launch
+``` sim_vehicle.py -v ArduCopter -f gazebo-iris --console --map --out=udp:127.0.0.1:14551 -I1 ```
+``` sim_vehicle.py -v ArduCopter -f gazebo-iris --console --map --out=udp:127.0.0.1:14551 -I2 ```
+``` sim_vehicle.py -v ArduCopter -f gazebo-iris --console --map --out=udp:127.0.0.1:14551 -I3 ```
+* Gazebo Garden/harmonic launch
+``` gz sim -v4 -r swarm.sdf ```
+
+
   
 
