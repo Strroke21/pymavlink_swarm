@@ -36,7 +36,7 @@ https://ardupilot.org/dev/docs/sitl-with-gazebo.html
 ``` cd /gz_ws/src/ardupilot_gazebo/models/follower1 ```
 [note: follower1 is one of my multicopters name ]
 
-* edit model.sdf file for each multicopter model to communicate will ardupilot sitl instances:
+* edit model.sdf file for each multicopter model to communicate with ardupilot sitl instances:
   
   ```
     <plugin name="ArduPilotPlugin"
