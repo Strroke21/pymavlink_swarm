@@ -37,6 +37,7 @@ https://ardupilot.org/dev/docs/sitl-with-gazebo.html
 [note: follower1 is one of my multicopters name ]
 
 * edit model.sdf file for each multicopter model to communicate will ardupilot sitl instances:
+  
   ``` <plugin name="ArduPilotPlugin" ```
   
         filename="ArduPilotPlugin">
