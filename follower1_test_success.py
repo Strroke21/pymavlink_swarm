@@ -357,6 +357,10 @@ while True:
 
             formation(angle,distance,tar_alt)   #position correction with final altitude   
 
+        if abs(rel_alt) <= 5: #this altitude should be local not relative just for now we are using this
+            VehicleMode(follower1,"LAND")
+            time.sleep(1)
+
         else:
             pass
 
